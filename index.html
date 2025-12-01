@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Isótopos Guadaíra - Liga de Fútbol Sala - Estadísticas y clasificación">
+    <title>Isótopos Guadaíra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="escudo.png" alt="Escudo Isótopos Guadaíra" class="logo-icon" style="width: 50px; height: 50px;">
+                <h1>Isótopos Guadaíra</h1>
+            </div>
+            <nav>
+                <ul id="nav-menu">
+                    <li><button id="btn-clasificacion" class="nav-btn active">Clasificación</button></li>
+                    <li><button id="btn-goleadores" class="nav-btn">Goleadores</button></li>
+                    <li><button id="btn-mvp" class="nav-btn">Puntos MVP</button></li>
+                    <li><button id="btn-resultados" class="nav-btn">Resultados por Jornada</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Clasificación Section (Default) -->
+        <section id="section-clasificacion" class="section active">
+            <div class="section-header">
+                <h2>Clasificación</h2>
+                <p>Tabla de posiciones actualizada</p>
+            </div>
+            <div class="card">
+                <div class="table-container">
+                    <table id="table-clasificacion">
+                        <thead>
+                            <tr>
+                                <th class="center">Pos</th>
+                                <th>Equipo</th>
+                                <th class="center">PJ</th>
+                                <th class="center">G</th>
+                                <th class="center">E</th>
+                                <th class="center">P</th>
+                                <th class="center">GF</th>
+                                <th class="center">GC</th>
+                                <th class="center">DG</th>
+                                <th class="center">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-clasificacion">
+                            <tr>
+                                <td colspan="10" class="loading">
+                                    <div class="loading-spinner"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goleadores Section -->
+        <section id="section-goleadores" class="section">
+            <div class="section-header">
+                <h2>Goleadores</h2>
+                <p>Máximos goleadores de la liga</p>
+            </div>
+            <div class="card">
+                <div class="player-list" id="list-goleadores">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MVP Section -->
+        <section id="section-mvp" class="section">
+            <div class="section-header">
+                <h2>Puntos MVP</h2>
+                <p>Ranking de jugadores más valiosos</p>
+            </div>
+            <div class="card">
+                <div class="player-list" id="list-mvp">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados Section -->
+        <section id="section-resultados" class="section">
+            <div class="section-header">
+                <h2>Resultados por Jornada</h2>
+                <p>Resultados por jornada</p>
+            </div>
+            <div id="container-resultados">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script id="data-json" type="application/json">
+{
+  "teams": [
+    {
+      "id": "davidbarber",
+      "name": "David Barber",
+      "shortName": "David Barber"
+    },
+    {
+      "id": "uddhdoctordaniels",
+      "name": "UDDH Doctor Daniels",
+      "shortName": "Doctor Daniels"
+    },
+    {
+      "id": "artajofs",
+      "name": "AR Tajo F.S.",
+      "shortName": "AR Tajo"
+    },
+    {
+      "id": "pitingosfs",
+      "name": "Pitingos F.S.",
+      "shortName": "Pitingos"
+    },
+    {
+      "id": "internacionalesfutsal",
+      "name": "Internacionales Futsal",
+      "shortName": "Internacionales"
+    },
+    {
+      "id": "losflojinos",
+      "name": "Los Flojiños",
+      "shortName": "Los Flojiños"
+    },
+    {
+      "id": "lprfutsal",
+      "name": "LPR Futsal",
+      "shortName": "LPR Futsal"
+    },
+    {
+      "id": "10codecantely",
+      "name": "10Code Cantely",
+      "shortName": "10Code"
+    },
+    {
+      "id": "interqalat",
+      "name": "Inter Qalat",
+      "shortName": "Inter Qalat"
+    },
+    {
+      "id": "sambafs",
+      "name": "Samba FS",
+      "shortName": "Samba"
+    },
+    {
+      "id": "blfs",
+      "name": "B&L FS",
+      "shortName": "B&L FS"
+    },
+    {
+      "id": "fscididi",
+      "name": "FS Cididi",
+      "shortName": "FS Cididi"
+    },
+    {
+      "id": "cdamparo",
+      "name": "C.D. Amparo",
+      "shortName": "Amparo"
+    },
+    {
+      "id": "isotopos",
+      "name": "Isótopos Guadaíra",
+      "shortName": "Isótopos"
+    },
+    {
+      "id": "yayosfutsal",
+      "name": "Yayos Futsal",
+      "shortName": "Yayos"
+    },
+    {
+      "id": "siddhartavivuela",
+      "name": "Siddharta Vivuela",
+      "shortName": "Siddharta"
+    },
+    {
+      "id": "losrococolos",
+      "name": "Los Rococolos",
+      "shortName": "Los Rococolos"
+    },
+    {
+      "id": "standardeviejas",
+      "name": "Standar de Viejas",
+      "shortName": "Standar de Viejas"
+    }
+  ],
+  "matches": [
+    {
+      "id": "m1",
+      "jornada": 1,
+      "homeTeamId": "isotopos",
+      "awayTeamId": "fscididi",
+      "homeScore": 4,
+      "awayScore": 4
+    },
+    {
+      "id": "m2",
+      "jornada": 1,
+      "homeTeamId": "cdamparo",
+      "awayTeamId": "davidbarber",
+      "homeScore": 5,
+      "awayScore": 8
+    },
+    {
+      "id": "m3",
+      "jornada": 1,
+      "homeTeamId": "lprfutsal",
+      "awayTeamId": "standardeviejas",
+      "homeScore": 8,
+      "awayScore": 2
+    },
+    {
+      "id": "m4",
+      "jornada": 1,
+      "homeTeamId": "internacionalesfutsal",
+      "awayTeamId": "losrococolos",
+      "homeScore": 5,
+      "awayScore": 0
+    },
+    {
+      "id": "m5",
+      "jornada": 1,
+      "homeTeamId": "pitingosfs",
+      "awayTeamId": "interqalat",
+      "homeScore": 6,
+      "awayScore": 4
+    },
+    {
+      "id": "m6",
+      "jornada": 1,
+      "homeTeamId": "sambafs",
+      "awayTeamId": "uddhdoctordaniels",
+      "homeScore": 2,
+      "awayScore": 6
+    },
+    {
+      "id": "m7",
+      "jornada": 1,
+      "homeTeamId": "10codecantely",
+      "awayTeamId": "siddhartavivuela",
+      "homeScore": 4,
+      "awayScore": 3
+    },
+    {
+      "id": "m8",
+      "jornada": 2,
+      "homeTeamId": "losrococolos",
+      "awayTeamId": "yayosfutsal",
+      "homeScore": 2,
+      "awayScore": 3
+    },
+    {
+      "id": "m9",
+      "jornada": 2,
+      "homeTeamId": "interqalat",
+      "awayTeamId": "sambafs",
+      "homeScore": 7,
+      "awayScore": 7
+    },
+    {
+      "id": "m10",
+      "jornada": 2,
+      "homeTeamId": "blfs",
+      "awayTeamId": "pitingosfs",
+      "homeScore": 4,
+      "awayScore": 5
+    },
+    {
+      "id": "m11",
+      "jornada": 2,
+      "homeTeamId": "artajofs",
+      "awayTeamId": "internacionalesfutsal",
+      "homeScore": 3,
+      "awayScore": 2
+    },
+    {
+      "id": "m12",
+      "jornada": 2,
+      "homeTeamId": "standardeviejas",
+      "awayTeamId": "10codecantely",
+      "homeScore": 2,
+      "awayScore": 5
+    },
+    {
+      "id": "m13",
+      "jornada": 2,
+      "homeTeamId": "uddhdoctordaniels",
+      "awayTeamId": "isotopos",
+      "homeScore": 4,
+      "awayScore": 2
+    },
+    {
+      "id": "m14",
+      "jornada": 2,
+      "homeTeamId": "siddhartavivuela",
+      "awayTeamId": "losflojinos",
+      "homeScore": 0,
+      "awayScore": 3
+    },
+    {
+      "id": "m15",
+      "jornada": 2,
+      "homeTeamId": "davidbarber",
+      "awayTeamId": "lprfutsal",
+      "homeScore": 5,
+      "awayScore": 2
+    },
+    {
+      "id": "m16",
+      "jornada": 2,
+      "homeTeamId": "fscididi",
+      "awayTeamId": "cdamparo",
+      "homeScore": 4,
+      "awayScore": 5
+    },
+    {
+      "id": "m17",
+      "jornada": 3,
+      "homeTeamId": "isotopos",
+      "awayTeamId": "interqalat",
+      "homeScore": 3,
+      "awayScore": 3
+    },
+    {
+      "id": "m18",
+      "jornada": 3,
+      "homeTeamId": "cdamparo",
+      "awayTeamId": "uddhdoctordaniels",
+      "homeScore": 3,
+      "awayScore": 4
+    },
+    {
+      "id": "m19",
+      "jornada": 3,
+      "homeTeamId": "lprfutsal",
+      "awayTeamId": "fscididi",
+      "homeScore": 6,
+      "awayScore": 2
+    },
+    {
+      "id": "m20",
+      "jornada": 3,
+      "homeTeamId": "internacionalesfutsal",
+      "awayTeamId": "yayosfutsal",
+      "homeScore": 4,
+      "awayScore": 1
+    },
+    {
+      "id": "m21",
+      "jornada": 3,
+      "homeTeamId": "artajofs",
+      "awayTeamId": "siddhartavivuela",
+      "homeScore": 5,
+      "awayScore": 0
+    },
+    {
+      "id": "m22",
+      "jornada": 3,
+      "homeTeamId": "sambafs",
+      "awayTeamId": "blfs",
+      "homeScore": 1,
+      "awayScore": 2
+    },
+    {
+      "id": "m23",
+      "jornada": 3,
+      "homeTeamId": "pitingosfs",
+      "awayTeamId": "losrococolos",
+      "homeScore": 1,
+      "awayScore": 0
+    },
+    {
+      "id": "m24",
+      "jornada": 3,
+      "homeTeamId": "losflojinos",
+      "awayTeamId": "standardeviejas",
+      "homeScore": 7,
+      "awayScore": 0
+    },
+    {
+      "id": "m25",
+      "jornada": 3,
+      "homeTeamId": "10codecantely",
+      "awayTeamId": "davidbarber",
+      "homeScore": 1,
+      "awayScore": 4
+    },
+    {
+      "id": "m26",
+      "jornada": 4,
+      "homeTeamId": "siddhartavivuela",
+      "awayTeamId": "internacionalesfutsal",
+      "homeScore": 2,
+      "awayScore": 3
+    },
+    {
+      "id": "m27",
+      "jornada": 4,
+      "homeTeamId": "standardeviejas",
+      "awayTeamId": "artajofs",
+      "homeScore": 2,
+      "awayScore": 4
+    },
+    {
+      "id": "m28",
+      "jornada": 4,
+      "homeTeamId": "interqalat",
+      "awayTeamId": "cdamparo",
+      "homeScore": 7,
+      "awayScore": 3
+    },
+    {
+      "id": "m29",
+      "jornada": 4,
+      "homeTeamId": "blfs",
+      "awayTeamId": "isotopos",
+      "homeScore": 5,
+      "awayScore": 5
+    },
+    {
+      "id": "m30",
+      "jornada": 4,
+      "homeTeamId": "losrococolos",
+      "awayTeamId": "sambafs",
+      "homeScore": 1,
+      "awayScore": 8
+    },
+    {
+      "id": "m31",
+      "jornada": 4,
+      "homeTeamId": "uddhdoctordaniels",
+      "awayTeamId": "lprfutsal",
+      "homeScore": 4,
+      "awayScore": 2
+    },
+    {
+      "id": "m32",
+      "jornada": 4,
+      "homeTeamId": "davidbarber",
+      "awayTeamId": "losflojinos",
+      "homeScore": 7,
+      "awayScore": 6
+    },
+    {
+      "id": "m33",
+      "jornada": 4,
+      "homeTeamId": "yayosfutsal",
+      "awayTeamId": "pitingosfs",
+      "homeScore": 0,
+      "awayScore": 2
+    },
+    {
+      "id": "m34",
+      "jornada": 4,
+      "homeTeamId": "fscididi",
+      "awayTeamId": "10codecantely",
+      "homeScore": 4,
+      "awayScore": 2
+    }
+  ],
+  "scorers": [
+    {
+      "playerId": "p1",
+      "playerName": "Ricardo",
+      "teamId": "isotopos",
+      "goals": 5,
+      "assists": 1
+    },
+    {
+      "playerId": "p2",
+      "playerName": "Dani",
+      "teamId": "isotopos",
+      "goals": 2,
+      "assists": 2
+    },
+    {
+      "playerId": "p3",
+      "playerName": "Chamorro",
+      "teamId": "isotopos",
+      "goals": 2,
+      "assists": 0
+    },
+    {
+      "playerId": "p4",
+      "playerName": "Samu",
+      "teamId": "isotopos",
+      "goals": 1,
+      "assists": 2
+    },
+    {
+      "playerId": "p5",
+      "playerName": "Bascón",
+      "teamId": "isotopos",
+      "goals": 1,
+      "assists": 1
+    },
+    {
+      "playerId": "p6",
+      "playerName": "Oli",
+      "teamId": "isotopos",
+      "goals": 1,
+      "assists": 1
+    },
+    {
+      "playerId": "p7",
+      "playerName": "Gonzalo",
+      "teamId": "isotopos",
+      "goals": 1,
+      "assists": 0
+    },
+    {
+      "playerId": "p8",
+      "playerName": "Pablo",
+      "teamId": "isotopos",
+      "goals": 1,
+      "assists": 0
+    },
+    {
+      "playerId": "p9",
+      "playerName": "Carlos",
+      "teamId": "isotopos",
+      "goals": 0,
+      "assists": 1
+    },
+    {
+      "playerId": "p10",
+      "playerName": "Rafa",
+      "teamId": "isotopos",
+      "goals": 0,
+      "assists": 1
+    }
+  ],
+  "mvp": [
+    {
+      "playerId": "p10",
+      "playerName": "Rafa",
+      "teamId": "isotopos",
+      "points": 1
+    },
+    {
+      "playerId": "p2",
+      "playerName": "Dani",
+      "teamId": "isotopos",
+      "points": 1
+    },
+    {
+      "playerId": "p8",
+      "playerName": "Pablo",
+      "teamId": "isotopos",
+      "points": 1
+    },
+    {
+      "playerId": "p1",
+      "playerName": "Ricardo",
+      "teamId": "isotopos",
+      "points": 1
+    }
+  ]
+}
+    </script>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
