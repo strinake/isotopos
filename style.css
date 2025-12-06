@@ -1,3 +1,5 @@
+@import 'upcoming_styles.css';
+
 :root {
   /* Colors - Dark theme matching reference website */
   --bg-primary: #121212;
@@ -82,6 +84,8 @@ body::before {
   pointer-events: none;
   z-index: -1;
 }
+
+
 
 /* Header */
 header {

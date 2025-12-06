@@ -1,6 +1,6 @@
 // Configuration
-const DATA_URL = 'data.json';
 const ISOTOPOS_ID = 'isotopos';
+let supabase;
 
 // Global state
 let data = {
@@ -11,9 +11,23 @@ let data = {
 };
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Init Supabase
+  if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'TU_SUPABASE_PROJECT_URL') {
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      console.error("Supabase init error:", e);
+      showError('Error inicializando Supabase.');
+      return;
+    }
+  } else {
+    showError('Configuración de Supabase incompleta. Por favor rellena config.js con tus credenciales.');
+    return;
+  }
+
   initNavigation();
-  loadData();
+  await loadData();
 });
 
 // Navigation
@@ -38,15 +52,54 @@ function initNavigation() {
   });
 }
 
-// Load data from inline JSON script in index.html
-function loadData() {
+// Load data from Supabase
+async function loadData() {
   try {
-    const script = document.getElementById('data-json');
-    if (!script) {
-      throw new Error('No se encontró el bloque de datos embebido (script#data-json).');
-    }
+    const [teamsRes, matchesRes, scorersRes, mvpRes] = await Promise.all([
+      supabase.from('teams').select('*'),
+      supabase.from('matches').select('*'),
+      supabase.from('scorers').select('*'),
+      supabase.from('mvp').select('*')
+    ]);
 
-    data = JSON.parse(script.textContent);
+    if (teamsRes.error) throw teamsRes.error;
+    if (matchesRes.error) throw matchesRes.error;
+    if (scorersRes.error) throw scorersRes.error;
+    if (mvpRes.error) throw mvpRes.error;
+
+    // Map data to internal structure
+    data.teams = teamsRes.data.map(t => ({
+      id: t.id,
+      name: t.name,
+      shortName: t.short_name
+    }));
+
+    data.matches = matchesRes.data.map(m => ({
+      id: m.id,
+      jornada: m.jornada,
+      homeTeamId: m.home_team_id,
+      awayTeamId: m.away_team_id,
+      homeScore: m.home_score,
+      awayScore: m.away_score,
+      venue: m.venue,
+      date: m.match_date,
+      time: m.match_time
+    }));
+
+    data.scorers = scorersRes.data.map(s => ({
+      playerId: s.player_id,
+      playerName: s.player_name,
+      teamId: s.team_id,
+      goals: s.goals,
+      assists: s.assists
+    }));
+
+    data.mvp = mvpRes.data.map(p => ({
+      playerId: p.player_id,
+      playerName: p.player_name,
+      teamId: p.team_id,
+      points: p.points
+    }));
 
     // Render all sections
     renderClasificacion();
@@ -54,8 +107,8 @@ function loadData() {
     renderMVP();
     renderResultados();
   } catch (error) {
-    console.error('Error loading inline data:', error);
-    showError('No se pudo cargar la información de la liga. Verifica que el bloque de datos JSON embebido es correcto.');
+    console.error('Error loading data from Supabase:', error);
+    showError('Error al conectar con la base de datos. Verifica tu conexión y configuración en config.js');
   }
 }
 
@@ -80,6 +133,9 @@ function calculateStandings() {
 
   // Process matches
   data.matches.forEach(match => {
+    // Skip if match hasn't been played (no scores)
+    if (match.homeScore === null || match.awayScore === null) return;
+
     const homeTeam = standings[match.homeTeamId];
     const awayTeam = standings[match.awayTeamId];
 
@@ -262,15 +318,36 @@ function renderResultados() {
       const homeClass = match.homeTeamId === ISOTOPOS_ID ? 'isotopos' : '';
       const awayClass = match.awayTeamId === ISOTOPOS_ID ? 'isotopos' : '';
 
-      return `
-        <div class="match-card ${matchClass}">
-          <div class="team home ${homeClass}">
-            ${homeTeam ? homeTeam.name : 'N/A'}
-          </div>
-          <div class="score">
+      const hasPlayed = match.homeScore !== null && match.awayScore !== null;
+
+      let scoreContent;
+      if (hasPlayed) {
+        scoreContent = `
             <span>${match.homeScore}</span>
             <span class="score-separator">-</span>
             <span>${match.awayScore}</span>
+        `;
+      } else {
+        const date = match.date ? new Date(match.date).toLocaleDateString() : 'Por determinar';
+        scoreContent = `
+            <div class="upcoming-info">
+                <span class="match-vs">VS</span>
+                <div class="match-meta">
+                    <span class="match-time">${match.time || '--:--'}</span>
+                    <span class="match-venue text-muted">${match.venue || ''}</span>
+                    <span class="match-date text-muted">${date}</span>
+                </div>
+            </div>
+        `;
+      }
+
+      return `
+        <div class="match-card ${matchClass} ${!hasPlayed ? 'upcoming' : ''}">
+          <div class="team home ${homeClass}">
+            ${homeTeam ? homeTeam.name : 'N/A'}
+          </div>
+          <div class="score ${!hasPlayed ? 'upcoming-score' : ''}">
+            ${scoreContent}
           </div>
           <div class="team away ${awayClass}">
             ${awayTeam ? awayTeam.name : 'N/A'}

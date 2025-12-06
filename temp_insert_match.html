@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div id="status">Running...</div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://kwzzwsimdjjfwxndazpc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3enp3c2ltZGpqZnd4bmRhenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwMTc3OTcsImV4cCI6MjA4MDU5Mzc5N30.qqgXExnzHJzNDX32axtZohkrNUCcKFn6dsom_aTklY8';
+
+        async function run() {
+            try {
+                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                // Insert match: AR Tajo (artajofs) vs Los Flojiños (losflojinos), 2-1, Jornada 1
+                const { error } = await supabase.from('matches').insert([
+                    { id: 'm44', jornada: 1, home_team_id: 'artajofs', away_team_id: 'losflojinos', home_score: 2, away_score: 1 }
+                ]);
+                if (error) throw error;
+                document.getElementById('status').textContent = 'MATCH INSERTED';
+            } catch (e) {
+                document.getElementById('status').textContent = 'ERROR: ' + e.message;
+            }
+        }
+        run();
+    </script>
+</body>
+
+</html>
