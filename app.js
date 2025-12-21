@@ -11,7 +11,7 @@ let data = {
 };
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', async () => {
+async function init() {
   // Init Supabase
   if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'TU_SUPABASE_PROJECT_URL') {
     try {
@@ -28,7 +28,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initNavigation();
   await loadData();
-});
+}
+
+// Execute initialization based on document state
+if (document.readyState === 'loading') {
+  // DOM is still loading, wait for DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  // DOM is already loaded, execute immediately
+  init();
+}
 
 // Navigation
 function initNavigation() {
