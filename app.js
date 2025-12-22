@@ -1,6 +1,8 @@
 // Configuration
 const ISOTOPOS_ID = 'isotopos';
-let supabase;
+
+// Global Supabase client
+let supabaseClient;
 
 // Global state
 let data = {
@@ -15,7 +17,7 @@ async function init() {
   // Init Supabase
   if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL !== 'TU_SUPABASE_PROJECT_URL') {
     try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } catch (e) {
       console.error("Supabase init error:", e);
       showError('Error inicializando Supabase.');
@@ -65,10 +67,10 @@ function initNavigation() {
 async function loadData() {
   try {
     const [teamsRes, matchesRes, scorersRes, mvpRes] = await Promise.all([
-      supabase.from('teams').select('*'),
-      supabase.from('matches').select('*'),
-      supabase.from('scorers').select('*'),
-      supabase.from('mvp').select('*')
+      supabaseClient.from('teams').select('*'),
+      supabaseClient.from('matches').select('*'),
+      supabaseClient.from('scorers').select('*'),
+      supabaseClient.from('mvp').select('*')
     ]);
 
     if (teamsRes.error) throw teamsRes.error;
