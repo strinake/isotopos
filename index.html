@@ -16,7 +16,8 @@
     <header>
         <div class="header-content">
             <div class="logo">
-                <img src="escudo.png" alt="Escudo Isótopos Guadaíra" class="logo-icon" style="width: 50px; height: 50px;">
+                <img src="escudo.png" alt="Escudo Isótopos Guadaíra" class="logo-icon"
+                    style="width: 50px; height: 50px;">
                 <h1>Isótopos Guadaíra</h1>
             </div>
             <nav>
@@ -25,6 +26,8 @@
                     <li><button id="btn-goleadores" class="nav-btn">Goleadores</button></li>
                     <li><button id="btn-mvp" class="nav-btn">Puntos MVP</button></li>
                     <li><button id="btn-resultados" class="nav-btn">Resultados por Jornada</button></li>
+                    <li><button id="btn-proximos" class="nav-btn">Próximos Partidos</button></li>
+                    <li><button id="btn-admin" class="nav-btn">Administración</button></li>
                 </ul>
             </nav>
         </div>
@@ -106,6 +109,100 @@
                 <div class="loading">
                     <div class="loading-spinner"></div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Próximos Partidos Section -->
+        <section id="section-proximos" class="section">
+            <div class="section-header">
+                <h2>Próximos Partidos</h2>
+                <p>Calendario de las próximas jornadas</p>
+            </div>
+            <div id="container-proximos">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </section>
+        <section id="section-admin" class="section">
+            <div class="section-header">
+                <h2>Administración</h2>
+                <p>Gestionar datos de la web</p>
+            </div>
+
+            <!-- LOGIN SECTION -->
+            <div id="admin-login" class="admin-login-container">
+                <div class="card login-card">
+                    <h3>Acceso Restringido</h3>
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input type="text" id="login-user" placeholder="Usuario">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="login-pass" placeholder="Contraseña">
+                    </div>
+                    <button class="action-btn full-width" onclick="checkAdminLogin()">Entrar</button>
+                    <p id="login-error" class="error-text" style="display:none;">Credenciales incorrectas</p>
+                </div>
+            </div>
+
+            <!-- PROTECTED ADMIN CONTENT -->
+            <div id="admin-panel" style="display: none;">
+
+                <!-- Admin Sub-Navigation -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="switchAdminTab('matches')">Partidos</button>
+                    <button class="admin-tab" onclick="switchAdminTab('scorers')">Goleadores</button>
+                    <button class="admin-tab" onclick="switchAdminTab('mvp')">MVP</button>
+                </div>
+
+                <!-- ADMIN: MATCHES -->
+                <div id="admin-matches" class="admin-section active">
+                    <div class="admin-controls card">
+                        <div class="control-group">
+                            <label for="admin-jornada-select">Jornada:</label>
+                            <select id="admin-jornada-select">
+                                <option value="">Cargando...</option>
+                            </select>
+                        </div>
+                        <button id="btn-add-match" class="action-btn">➕ Añadir Partido</button>
+                    </div>
+
+                    <div id="container-admin">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN: SCORERS -->
+                <div id="admin-scorers" class="admin-section" style="display: none;">
+                    <div class="admin-controls card">
+                        <h3>Goleadores</h3>
+                        <button id="btn-add-scorer" class="action-btn" onclick="addNewScorer()">➕ Añadir
+                            Goleador</button>
+                    </div>
+                    <div id="container-admin-scorers">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN: MVP -->
+                <div id="admin-mvp" class="admin-section" style="display: none;">
+                    <div class="admin-controls card">
+                        <h3>Puntos MVP</h3>
+                        <button id="btn-add-mvp" class="action-btn" onclick="addNewMVP()">➕ Añadir MVP</button>
+                    </div>
+                    <div id="container-admin-mvp">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
